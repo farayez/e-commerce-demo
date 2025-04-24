@@ -1,24 +1,39 @@
+import { useEffect, useState } from 'react';
+import { Dimensions } from 'react-native';
 import { Tabs } from 'expo-router';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { DisplayProperties } from '@/constants/DisplayProperties';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const [isLargeScreen, setIsLargeScreen] = useState(Dimensions.get('window').width > DisplayProperties.SMALL_SCREEN_THRESHOLD);
+
+  useEffect(() => {
+    const updateScreenSize = () => {
+      setIsLargeScreen(Dimensions.get('window').width > DisplayProperties.SMALL_SCREEN_THRESHOLD);
+    };
+
+    const subscription = Dimensions.addEventListener('change', updateScreenSize);
+    return () => subscription?.remove();
+  }, []);
 
   return (
     <Tabs
       screenOptions={{
-        tabBarStyle: {
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          paddingVertical: 10,
-          backgroundColor: '#f8f8f8',
-          height: 70, // Ensures uniform spacing and full visibility of text
-        },
+        tabBarStyle: isLargeScreen
+          ? { display: 'none' }
+          : {
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+              paddingVertical: 10,
+              backgroundColor: '#f8f8f8',
+              height: 70,
+            },
         tabBarLabelPosition: 'below-icon',
         tabBarShowLabel: true,
         tabBarLabelStyle: {
