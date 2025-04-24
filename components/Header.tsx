@@ -1,20 +1,21 @@
 import React from 'react';
 import { View, TextInput, Image, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { DisplayProperties } from '@/constants/DisplayProperties';
 
 const Header = () => {
   const { width } = useWindowDimensions();
 
   return (
     <View style={styles.header}>
-      {width < 600 ? (
+      {width < DisplayProperties.SMALL_SCREEN_THRESHOLD ? (
         <View style={styles.smallScreenHeader}>
           <View style={styles.topRow}>
             <Image source={require('../assets/images/dummy-logo.png')} style={styles.logo} />
             <View style={styles.icons}>
-              <Ionicons name="cart-outline" size={24} color="white" style={styles.icon} />
-              <Ionicons name="heart-outline" size={24} color="white" style={styles.icon} />
-              <Ionicons name="person-outline" size={24} color="white" style={styles.icon} />
+              <Ionicons name="cart-outline" size={30} color="white" style={styles.icon} />
+              <Ionicons name="heart-outline" size={30} color="white" style={styles.icon} />
+              <Ionicons name="person-outline" size={30} color="white" style={styles.icon} />
             </View>
           </View>
           <View style={styles.bottomRow}>
@@ -44,9 +45,9 @@ const Header = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.icons}>
-            <Ionicons name="cart-outline" size={24} color="white" style={styles.icon} />
-            <Ionicons name="heart-outline" size={24} color="white" style={styles.icon} />
-            <Ionicons name="person-outline" size={24} color="white" style={styles.icon} />
+            <Ionicons name="cart-outline" size={30} color="white" style={styles.icon} />
+            <Ionicons name="heart-outline" size={30} color="white" style={styles.icon} />
+            <Ionicons name="person-outline" size={30} color="white" style={styles.icon} />
           </View>
         </View>
       )}
@@ -90,15 +91,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     borderRadius: 25,
-    marginHorizontal: 8,
+    marginHorizontal: 80,
     paddingHorizontal: 0,
     overflow: 'hidden',
+    maxWidth: 550,
   },
   searchContainerSmall: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
     borderRadius: 25,
+    marginHorizontal: 10,
     overflow: 'hidden',
   },
   cameraIcon: {
