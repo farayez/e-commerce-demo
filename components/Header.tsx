@@ -1,53 +1,137 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, Image } from 'react-native';
+import { View, TextInput, Image, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const Header = () => (
-  <View style={styles.header}>
-    <Image source={require('../assets/images/dummy-logo.png')} style={styles.logo} />
-    <TextInput
-      style={styles.searchBar}
-      placeholder="Search by keyword"
-      placeholderTextColor="#888"
-    />
-    <View style={styles.icons}>
-      <Ionicons name="cart-outline" size={24} color="black" style={styles.icon} />
-      <Ionicons name="heart-outline" size={24} color="black" style={styles.icon} />
-      <Ionicons name="person-outline" size={24} color="black" style={styles.icon} />
+const Header = () => {
+  const { width } = useWindowDimensions();
+
+  return (
+    <View style={styles.header}>
+      {width < 600 ? (
+        <View style={styles.smallScreenHeader}>
+          <View style={styles.topRow}>
+            <Image source={require('../assets/images/dummy-logo.png')} style={styles.logo} />
+            <View style={styles.icons}>
+              <Ionicons name="cart-outline" size={24} color="white" style={styles.icon} />
+              <Ionicons name="heart-outline" size={24} color="white" style={styles.icon} />
+              <Ionicons name="person-outline" size={24} color="white" style={styles.icon} />
+            </View>
+          </View>
+          <View style={styles.bottomRow}>
+            <View style={styles.searchContainerSmall}>
+              <TextInput
+                style={styles.searchBar}
+                placeholder="Search by keyword"
+                placeholderTextColor="#888"
+              />
+              <TouchableOpacity style={styles.searchButton}>
+                <Ionicons name="search" size={20} color="white" />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      ) : (
+        <View style={styles.largeScreenHeader}>
+          <Image source={require('../assets/images/dummy-logo.png')} style={styles.logo} />
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchBar}
+              placeholder="Search by keyword"
+              placeholderTextColor="#888"
+            />
+            <TouchableOpacity style={styles.searchButton}>
+              <Ionicons name="search" size={20} color="white" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.icons}>
+            <Ionicons name="cart-outline" size={24} color="white" style={styles.icon} />
+            <Ionicons name="heart-outline" size={24} color="white" style={styles.icon} />
+            <Ionicons name="person-outline" size={24} color="white" style={styles.icon} />
+          </View>
+        </View>
+      )}
     </View>
-  </View>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   header: {
+    width: '100%',
+    backgroundColor: '#007b8f',
+    paddingVertical: 12,
+  },
+  smallScreenHeader: {
+    flexDirection: 'column',
+  },
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+  },
+  bottomRow: {
+    marginTop: 8,
+    paddingHorizontal: 10,
+  },
+  largeScreenHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 8, // Reduced horizontal padding
-    paddingVertical: 10, // Adjusted vertical padding
-    backgroundColor: '#f8f8f8',
-    width: '100%',
+    paddingHorizontal: 10,
   },
   logo: {
-    width: 80, // Reduced logo width
-    height: 30, // Reduced logo height
+    width: 120,
+    height: 50,
     resizeMode: 'contain',
+  },
+  searchContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 25,
+    marginHorizontal: 8,
+    paddingHorizontal: 0,
+    overflow: 'hidden',
+  },
+  searchContainerSmall: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 25,
+    overflow: 'hidden',
+  },
+  cameraIcon: {
+    marginRight: 8,
   },
   searchBar: {
     flex: 1,
-    marginHorizontal: 8, // Reduced margin
-    padding: 6, // Adjusted padding
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    backgroundColor: '#fff',
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    paddingLeft: 20,
+    fontSize: 16,
+  },
+  searchButton: {
+    backgroundColor: 'black',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderTopRightRadius: 25,
+    borderBottomRightRadius: 25,
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
+  },
+  searchButtonSmall: {
+    backgroundColor: 'black',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 25,
   },
   icons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   icon: {
-    marginHorizontal: 4, // Reduced icon margin
+    marginHorizontal: 6,
   },
 });
 
