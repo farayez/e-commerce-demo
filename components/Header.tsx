@@ -1,7 +1,14 @@
-import React from 'react';
-import { View, TextInput, Image, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { DisplayProperties } from '@/constants/DisplayProperties';
+import React from "react";
+import {
+  View,
+  TextInput,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  useWindowDimensions,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { DisplayProperties } from "@/constants/DisplayProperties";
 
 const Header = () => {
   const { width } = useWindowDimensions();
@@ -11,7 +18,7 @@ const Header = () => {
       {width < DisplayProperties.SMALL_SCREEN_THRESHOLD ? (
         <View style={styles.smallScreenHeader}>
           <View style={styles.topRow}>
-            <Image source={require('../assets/images/dummy-logo.png')} style={styles.logo} />
+            <Image source={require("../assets/images/dummy-logo.png")} style={styles.logo} />
             <View style={styles.icons}>
               <Ionicons name="cart-outline" size={30} color="white" style={styles.icon} />
               <Ionicons name="heart-outline" size={30} color="white" style={styles.icon} />
@@ -33,7 +40,7 @@ const Header = () => {
         </View>
       ) : (
         <View style={styles.largeScreenHeader}>
-          <Image source={require('../assets/images/dummy-logo.png')} style={styles.logo} />
+          <Image source={require("../assets/images/dummy-logo.png")} style={styles.logo} />
           <View style={styles.searchContainer}>
             <TextInput
               style={styles.searchBar}
@@ -57,17 +64,17 @@ const Header = () => {
 
 const styles = StyleSheet.create({
   header: {
-    width: '100%',
-    backgroundColor: '#007b8f',
+    width: "100%",
+    backgroundColor: "#007b8f",
     paddingVertical: 12,
   },
   smallScreenHeader: {
-    flexDirection: 'column',
+    flexDirection: "column",
   },
   topRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: 10,
   },
   bottomRow: {
@@ -75,34 +82,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   largeScreenHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 10,
   },
   logo: {
     width: 120,
     height: 50,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   searchContainer: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
     borderRadius: 25,
     marginHorizontal: 80,
     paddingHorizontal: 0,
-    overflow: 'hidden',
+    overflow: "hidden",
     maxWidth: 550,
   },
   searchContainerSmall: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
     borderRadius: 25,
     marginHorizontal: 10,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   cameraIcon: {
     marginRight: 8,
@@ -115,7 +122,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   searchButton: {
-    backgroundColor: 'black',
+    backgroundColor: "black",
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderTopRightRadius: 25,
@@ -124,14 +131,14 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 0,
   },
   searchButtonSmall: {
-    backgroundColor: 'black',
+    backgroundColor: "black",
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 25,
   },
   icons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   icon: {
     marginHorizontal: 6,
