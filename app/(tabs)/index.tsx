@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -7,9 +7,8 @@ import {
   FlatList,
   TouchableOpacity,
   ScrollView,
-  useWindowDimensions,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import CarouselList from "@/components/CarouselList";
 import { DisplayProperties } from "@/constants/DisplayProperties";
 
 const categories = [
@@ -74,45 +73,8 @@ interface Product {
 }
 
 const HomePage = () => {
-  const { width } = useWindowDimensions();
-  const [isLargeScreen, setIsLargeScreen] = useState(
-    width > DisplayProperties.SMALL_SCREEN_THRESHOLD,
-  );
-  const flatListRef = useRef<FlatList>(null);
-  const [scrollOffset, setScrollOffset] = useState(0);
-  const [contentWidth, setContentWidth] = useState(0);
-  const ITEM_WIDTH = 200;
-
-  useEffect(() => {
-    const updateScreenSize = () => {
-      setIsLargeScreen(width > DisplayProperties.SMALL_SCREEN_THRESHOLD);
-    };
-    updateScreenSize();
-  }, [width]);
-
-  const scrollToOffset = (forward: boolean) => {
-    if (flatListRef.current) {
-      const newOffset = forward
-        ? Math.min(scrollOffset + ITEM_WIDTH, contentWidth - width + 20)
-        : Math.max(0, scrollOffset - ITEM_WIDTH);
-      flatListRef.current.scrollToOffset({
-        offset: newOffset,
-        animated: true,
-      });
-      setScrollOffset(newOffset);
-    }
-  };
-
-  const handleScroll = (event: { nativeEvent: { contentOffset: { x: number } } }) => {
-    setScrollOffset(event.nativeEvent.contentOffset.x);
-  };
-
-  const handleContentSizeChange = (w: number) => {
-    setContentWidth(w);
-  };
-
   const renderCategory = ({ item }: { item: Category }) => (
-    <TouchableOpacity style={[styles.categoryItem, isLargeScreen && styles.categoryItemLarge]}>
+    <TouchableOpacity style={styles.categoryItem}>
       <View style={styles.categoryIconContainer}>
         <Image source={item.icon} style={styles.categoryIcon} />
       </View>
@@ -131,41 +93,11 @@ const HomePage = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.categoriesContainer}>
-        {isLargeScreen && (
-          <View style={styles.carouselControls}>
-            {scrollOffset > 0 && (
-              <TouchableOpacity
-                style={[styles.carouselButton, styles.backButton]}
-                onPress={() => scrollToOffset(false)}
-              >
-                <Ionicons name="chevron-back" size={24} color="#333" />
-              </TouchableOpacity>
-            )}
-
-            {scrollOffset < contentWidth - width + 20 && (
-              <TouchableOpacity
-                style={[styles.carouselButton, styles.forwardButton]}
-                onPress={() => scrollToOffset(true)}
-              >
-                <Ionicons name="chevron-forward" size={24} color="#333" />
-              </TouchableOpacity>
-            )}
-          </View>
-        )}
-        <FlatList
-          ref={flatListRef}
-          key={isLargeScreen ? "carousel" : "grid"}
+        <CarouselList
           data={categories}
           renderItem={renderCategory}
-          keyExtractor={(item) => item.id}
-          numColumns={isLargeScreen ? 1 : 3}
-          horizontal={isLargeScreen}
-          scrollEnabled={isLargeScreen}
-          showsHorizontalScrollIndicator={false}
-          onScroll={isLargeScreen ? handleScroll : undefined}
-          scrollEventThrottle={16}
-          onContentSizeChange={isLargeScreen ? handleContentSizeChange : undefined}
-          contentContainerStyle={isLargeScreen && styles.categoriesCarousel}
+          itemWidth={180}
+          widthCutoff={DisplayProperties.SMALL_SCREEN_THRESHOLD}
         />
       </View>
 
@@ -228,6 +160,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 20,
     position: "relative",
+    alignItems: "center",
+    justifyContent: "center",
   },
   categoryItem: {
     flex: 1,
@@ -235,26 +169,16 @@ const styles = StyleSheet.create({
     padding: 10,
     width: "33.33%",
   },
-  categoryItemLarge: {
-    width: 180,
-    marginHorizontal: 10,
-    backgroundColor: "#f5f5f5",
-    borderRadius: 12,
-    padding: 15,
-  },
-  categoriesCarousel: {
-    paddingHorizontal: 10,
-  },
   categoryIconContainer: {
-    width: 60,
-    height: 60,
+    width: 140,
+    height: 100,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 8,
   },
   categoryIcon: {
-    width: 40,
-    height: 40,
+    width: 100,
+    height: 100,
     resizeMode: "contain",
   },
   categoryName: {
@@ -300,35 +224,6 @@ const styles = StyleSheet.create({
   productPrice: {
     fontSize: 14,
     color: "#888",
-  },
-  carouselControls: {
-    position: "absolute",
-    top: "50%",
-    left: 0,
-    right: 0,
-    zIndex: 1,
-    pointerEvents: "box-none",
-  },
-  carouselButton: {
-    position: "absolute",
-    top: -20,
-    backgroundColor: "#fff",
-    borderRadius: 50,
-    padding: 8,
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  backButton: {
-    left: 5,
-  },
-  forwardButton: {
-    right: 5,
   },
 });
 
