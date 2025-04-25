@@ -1,12 +1,32 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, TextInput } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+
+const categories = [
+    { id: '1', name: 'Bags', icon: require('../../assets/icons/categories/bag.png') },
+    { id: '2', name: 'Jewelry', icon: require('../../assets/icons/categories/jewelry.png') },
+    { id: '3', name: 'Shoes', icon: require('../../assets/icons/categories/shoes.png') },
+    { id: '4', name: 'Beauty Products', icon: require('../../assets/icons/categories/beauty.png') },
+    { id: '5', name: 'Mens Clothing', icon: require('../../assets/icons/categories/mens-clothing.png') },
+    { id: '6', name: 'Womens Clothing', icon: require('../../assets/icons/categories/womens-clothing.png') },
+    { id: '7', name: 'Baby Items', icon: require('../../assets/icons/categories/baby.png') },
+    { id: '8', name: 'Eyewear', icon: require('../../assets/icons/categories/eyewear.png') },
+    { id: '9', name: 'Phone Accessories', icon: require('../../assets/icons/categories/phone-accessories.png') },
+    { id: '10', name: 'Watches', icon: require('../../assets/icons/categories/watches.png') },
+    { id: '11', name: 'Groceries', icon: require('../../assets/icons/categories/groceries.png') },
+  { id: '12', name: 'Electronics', icon: require('../../assets/icons/categories/electronics.png') },
+];
 
 const products = [
   { id: '1', name: 'Product 1', price: '$10', image: require('../../assets/images/sample-product-1.png') },
   { id: '2', name: 'Product 2', price: '$20', image: require('../../assets/images/sample-product-2.png') },
   { id: '3', name: 'Product 3', price: '$30', image: require('../../assets/images/sample-product-3.png') },
 ];
+
+interface Category {
+  id: string;
+  name: string;
+  icon: any;
+}
 
 interface Product {
   id: string;
@@ -15,23 +35,16 @@ interface Product {
   image: any;
 }
 
-const Header = () => (
-  <View style={styles.header}>
-    <Image source={require('../../assets/images/dummy-logo.png')} style={styles.headerLogo} />
-    <TextInput
-      style={styles.searchBar}
-      placeholder="Search by keyword"
-      placeholderTextColor="#888"
-    />
-    <View style={styles.headerIcons}>
-      <Ionicons name="cart-outline" size={24} color="black" style={styles.icon} />
-      <Ionicons name="heart-outline" size={24} color="black" style={styles.icon} />
-      <Ionicons name="person-outline" size={24} color="black" style={styles.icon} />
-    </View>
-  </View>
-);
-
 const HomePage = () => {
+  const renderCategory = ({ item }: { item: Category }) => (
+    <TouchableOpacity style={styles.categoryItem}>
+      <View style={styles.categoryIconContainer}>
+        <Image source={item.icon} style={styles.categoryIcon} />
+      </View>
+      <Text style={styles.categoryName}>{item.name}</Text>
+    </TouchableOpacity>
+  );
+
   const renderProduct = ({ item }: { item: Product }) => (
     <TouchableOpacity style={styles.productCard}>
       <Image source={item.image} style={styles.productImage} />
@@ -41,15 +54,29 @@ const HomePage = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={products}
-        renderItem={renderProduct}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.productList}
-        numColumns={2}
-      />
-    </View>
+    <ScrollView style={styles.container}>
+      <View style={styles.categoriesContainer}>
+        <FlatList
+          data={categories}
+          renderItem={renderCategory}
+          keyExtractor={(item) => item.id}
+          numColumns={3}
+          scrollEnabled={false}
+        />
+      </View>
+      
+      <View style={styles.productsSection}>
+        <Text style={styles.sectionTitle}>Popular Products</Text>
+        <FlatList
+          data={products}
+          renderItem={renderProduct}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.productList}
+          numColumns={2}
+          scrollEnabled={false}
+        />
+      </View>
+    </ScrollView>
   );
 };
 
@@ -93,12 +120,47 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 4,
   },
+  categoriesContainer: {
+    padding: 10,
+  },
+  categoryItem: {
+    flex: 1,
+    alignItems: 'center',
+    padding: 10,
+    width: '33.33%',
+  },
+  categoryIconContainer: {
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  categoryIcon: {
+    width: 40,
+    height: 40,
+    resizeMode: 'contain',
+  },
+  categoryName: {
+    fontSize: 12,
+    textAlign: 'center',
+    color: '#333',
+  },
+  productsSection: {
+    marginTop: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    marginLeft: 16,
+  },
   container: {
     flex: 1,
-    padding: 16,
     backgroundColor: '#fff',
   },
   productList: {
+    paddingHorizontal: 8,
     paddingBottom: 16,
   },
   productCard: {
