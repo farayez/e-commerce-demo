@@ -1,14 +1,7 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import CarouselList from "@/components/CarouselList";
+import { ExhibitionPanel } from "@/components/ExhibitionPanel";
 import { DisplayProperties } from "@/constants/DisplayProperties";
 
 const categories = [
@@ -38,27 +31,6 @@ const categories = [
   { id: "12", name: "Electronics", icon: require("../../assets/icons/categories/electronics.png") },
 ];
 
-const products = [
-  {
-    id: "1",
-    name: "Product 1",
-    price: "$10",
-    image: require("../../assets/images/sample-product-1.png"),
-  },
-  {
-    id: "2",
-    name: "Product 2",
-    price: "$20",
-    image: require("../../assets/images/sample-product-2.png"),
-  },
-  {
-    id: "3",
-    name: "Product 3",
-    price: "$30",
-    image: require("../../assets/images/sample-product-3.png"),
-  },
-];
-
 interface Category {
   id: string;
   name: string;
@@ -69,8 +41,77 @@ interface Product {
   id: string;
   name: string;
   price: string;
+  originalPrice?: string;
   image: any;
+  soldCount?: number;
 }
+
+const products = [
+  {
+    id: "1",
+    name: "Premium Headphones",
+    price: "$199",
+    originalPrice: "$219",
+    image: require("../../assets/images/sample-product-1.png"),
+    soldCount: 162,
+  },
+  {
+    id: "2",
+    name: "Smart Watch",
+    price: "$299",
+    originalPrice: "$329",
+    image: require("../../assets/images/sample-product-2.png"),
+    soldCount: 89,
+  },
+  {
+    id: "3",
+    name: "Wireless Earbuds",
+    price: "$159",
+    image: require("../../assets/images/sample-product-3.png"),
+  },
+  {
+    id: "4",
+    name: "Gaming Headset",
+    price: "$179",
+    image: require("../../assets/images/sample-product-1.png"),
+  },
+  {
+    id: "5",
+    name: "Fitness Tracker",
+    price: "$129",
+    image: require("../../assets/images/sample-product-2.png"),
+  },
+  {
+    id: "6",
+    name: "Sport Earbuds",
+    price: "$149",
+    image: require("../../assets/images/sample-product-3.png"),
+  },
+  {
+    id: "7",
+    name: "Pro Headphones",
+    price: "$249",
+    image: require("../../assets/images/sample-product-1.png"),
+  },
+  {
+    id: "8",
+    name: "Digital Watch",
+    price: "$199",
+    image: require("../../assets/images/sample-product-2.png"),
+  },
+  {
+    id: "9",
+    name: "Noise Cancelling Buds",
+    price: "$189",
+    image: require("../../assets/images/sample-product-3.png"),
+  },
+  {
+    id: "10",
+    name: "Studio Headphones",
+    price: "$279",
+    image: require("../../assets/images/sample-product-1.png"),
+  },
+];
 
 const HomePage = () => {
   const renderCategory = ({ item }: { item: Category }) => (
@@ -82,11 +123,21 @@ const HomePage = () => {
     </TouchableOpacity>
   );
 
-  const renderProduct = ({ item }: { item: Product }) => (
+  const renderProduct = (item: Product) => (
     <TouchableOpacity style={styles.productCard}>
-      <Image source={item.image} style={styles.productImage} />
-      <Text style={styles.productName}>{item.name}</Text>
-      <Text style={styles.productPrice}>{item.price}</Text>
+      <View style={styles.imageContainer}>
+        <Image source={item.image} style={styles.productImage} resizeMode="contain" />
+      </View>
+      <View style={styles.productDetails}>
+        <Text style={styles.productName} numberOfLines={2}>
+          {item.name}
+        </Text>
+        <View style={styles.priceContainer}>
+          <Text style={styles.productPrice}>{item.price}</Text>
+          {item.originalPrice && <Text style={styles.originalPrice}>{item.originalPrice}</Text>}
+        </View>
+        {item.soldCount && <Text style={styles.soldCount}>SOLD: {item.soldCount}</Text>}
+      </View>
     </TouchableOpacity>
   );
 
@@ -101,17 +152,13 @@ const HomePage = () => {
         />
       </View>
 
-      <View style={styles.productsSection}>
-        <Text style={styles.sectionTitle}>Popular Products</Text>
-        <FlatList
-          data={products}
-          renderItem={renderProduct}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.productList}
-          numColumns={2}
-          scrollEnabled={false}
-        />
-      </View>
+      <ExhibitionPanel
+        data={products}
+        renderItem={renderProduct}
+        title="Popular Products"
+        minCardWidth={200}
+        maxCardWidth={230}
+      />
     </ScrollView>
   );
 };
@@ -204,26 +251,55 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   productCard: {
-    flex: 1,
-    backgroundColor: "#f9f9f9",
+    height: 320,
+    backgroundColor: "#ffffff",
     borderRadius: 8,
-    padding: 16,
-    margin: 8,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "#eee",
+  },
+  imageContainer: {
+    height: 200,
+    width: "100%",
+    backgroundColor: "#f6f6f6",
     alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 20,
   },
   productImage: {
-    width: 100,
-    height: 100,
-    marginBottom: 8,
+    width: "80%",
+    height: "80%",
+  },
+  productDetails: {
+    padding: 12,
+    flex: 1,
+    justifyContent: "space-between",
   },
   productName: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 14,
+    color: "#333",
+    marginBottom: 8,
+    lineHeight: 20,
+  },
+  priceContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
     marginBottom: 4,
   },
   productPrice: {
+    fontSize: 16,
+    color: "#e41749",
+    fontWeight: "600",
+  },
+  originalPrice: {
     fontSize: 14,
-    color: "#888",
+    textDecorationLine: "line-through",
+    color: "#999",
+  },
+  soldCount: {
+    fontSize: 12,
+    color: "#999",
   },
 });
 
