@@ -155,9 +155,9 @@ const HomePage = () => {
       <ExhibitionPanel
         data={products}
         renderItem={renderProduct}
-        title="Popular Products"
-        minCardWidth={200}
+        minCardWidth={160}
         maxCardWidth={230}
+        title="Popular Products"
       />
     </ScrollView>
   );
